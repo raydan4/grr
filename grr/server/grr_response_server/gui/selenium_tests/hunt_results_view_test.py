@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Lint as: python3
 # -*- encoding: utf-8 -*-
 """Test the hunt results interface."""
 from __future__ import absolute_import
@@ -15,6 +14,7 @@ from grr_response_server.gui import api_call_router_with_approval_checks
 from grr_response_server.gui import gui_test_lib
 from grr_response_server.gui.api_plugins import hunt as api_hunt
 from grr_response_server.output_plugins import csv_plugin
+from grr_response_server.output_plugins import json_plugin
 from grr_response_server.output_plugins import sqlite_plugin
 from grr_response_server.output_plugins import yaml_plugin
 from grr.test_lib import test_lib
@@ -97,6 +97,16 @@ class TestHuntResultsView(gui_test_lib.GRRSeleniumHuntTest):
     self.checkHuntResultsCanBeDownloadedAsType(
         mock_method, csv_plugin.CSVInstantOutputPlugin.plugin_name,
         csv_plugin.CSVInstantOutputPlugin.friendly_name)
+
+  @mock.patch.object(
+      api_call_router_with_approval_checks.ApiCallRouterWithApprovalChecks,
+      "GetExportedHuntResults",
+      return_value=api_hunt.ApiGetExportedHuntResultsHandler())
+  def testHuntResultsCanBeDownloadedAsJson(self, mock_method):
+    self.checkHuntResultsCanBeDownloadedAsType(
+        mock_method,
+        json_plugin.JsonInstantOutputPluginWithExportConversion.plugin_name,
+        json_plugin.JsonInstantOutputPluginWithExportConversion.friendly_name)
 
   @mock.patch.object(
       api_call_router_with_approval_checks.ApiCallRouterWithApprovalChecks,

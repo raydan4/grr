@@ -34,6 +34,7 @@ const DownloadCollectionAsController = class {
     /** @type {Object} */
     this.pluginToDisplayName = {
       'csv-zip': 'CSV (zipped)',
+      'flattened-json-zip': 'Flattened JSON (zipped)',
       'flattened-yaml-zip': 'Flattened YAML (zipped)',
       'sqlite-zip': 'SQLite scripts (zipped)'
     };

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Lint as: python3
 """Test the flow archive."""
 from __future__ import absolute_import
 from __future__ import division
@@ -19,6 +18,7 @@ from grr_response_server.gui import archive_generator
 from grr_response_server.gui import gui_test_lib
 from grr_response_server.gui.api_plugins import flow as api_flow
 from grr_response_server.output_plugins import csv_plugin
+from grr_response_server.output_plugins import json_plugin
 from grr_response_server.output_plugins import sqlite_plugin
 from grr_response_server.output_plugins import yaml_plugin
 from grr.test_lib import action_mocks
@@ -142,6 +142,16 @@ class TestFlowArchive(gui_test_lib.GRRSeleniumTest):
     self.checkClickingOnDownloadAsStartsDownloadForType(
         mock_method, csv_plugin.CSVInstantOutputPlugin.plugin_name,
         csv_plugin.CSVInstantOutputPlugin.friendly_name)
+
+  @mock.patch.object(
+      api_call_router_with_approval_checks.ApiCallRouterWithApprovalChecks,
+      "GetExportedFlowResults",
+      return_value=api_flow.ApiGetExportedFlowResultsHandler())
+  def testClickingOnDownloadAsJsonZipStartsDownload(self, mock_method):
+    self.checkClickingOnDownloadAsStartsDownloadForType(
+        mock_method,
+        json_plugin.JsonInstantOutputPluginWithExportConversion.plugin_name,
+        json_plugin.JsonInstantOutputPluginWithExportConversion.friendly_name)
 
   @mock.patch.object(
       api_call_router_with_approval_checks.ApiCallRouterWithApprovalChecks,
